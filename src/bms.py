@@ -1,5 +1,7 @@
 from dalybms import daly_bms
+from serial.serialutil import SerialException
 import logging
+import time
 
 class BMS:
     _ult_soc_medido = 0.0
@@ -20,15 +22,27 @@ class BMS:
         else:
             self.daly = daly_bms.DalyBMS(5)
 
-        self.daly.connect(porta)
+        try:
+            self.daly.connect(porta)
+        except SerialException as ex:
+            print(f"BMS NÃO ESTÁ CONECTADO! Detalhes: {ex}")
 
     def validar_falha(self):
-        return not self.daly.get_status()
+        try:
+            return not self.daly.get_status()
+        except Exception:
+            return True
+
 
     def desconectar(self):
-        self.daly.disconnect()
+        try:
+            self.daly.disconnect()
+        except Exception:
+            pass
     
     def retornar_tensao_total(self, tentativa = 1):
+        socJson = False
+
         try:
             socJson = self.daly.get_soc()
         except Exception as e:
@@ -37,13 +51,19 @@ class BMS:
         if not socJson:
             if tentativa < 3:
                 self.desconectar()
-                self.daly.restart()
+                try:
+                    self.daly.restart()
+                except Exception as e:
+                    print(f"Ocorreu um erro BMS restart: {e}")
 
-                self.retornar_tensao_total(tentativa + 1)
+                time.sleep(2)
+
+                return self.retornar_tensao_total(tentativa + 1)
             else:
-                return _ult_soc_medido
+                ##DEBGUG print(f"_ult_soc_medido: {self._ult_soc_medido}")
+                return self._ult_soc_medido
             
-        _ult_soc_medido = socJson.total_voltage
+        self._ult_soc_medido = socJson.total_voltage
         return socJson.total_voltage
     
     

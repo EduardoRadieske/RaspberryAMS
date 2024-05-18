@@ -1,5 +1,4 @@
 import traceback
-import time
 from RPiSim.GPIO import GPIO 
 #import RPi.GPIO as GPIO ---- PARA EXECUTAR NO RASPBIAN
 
@@ -32,7 +31,7 @@ class Raspberry:
             traceback.print_exc()
             return False
     
-    def finalizar():
+    def finalizar(self):
         try:
             GPIO.cleanup()
         except Exception:
