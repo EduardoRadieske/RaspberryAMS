@@ -1,6 +1,6 @@
 import traceback
-from RPiSim.GPIO import GPIO 
-#import RPi.GPIO as GPIO ---- PARA EXECUTAR NO RASPBIAN
+#from RPiSim.GPIO import GPIO -- DESCOMENTAR PARA TESTAR NO WINDOWS
+import RPi.GPIO as GPIO
 
 class Raspberry:
     _GPIO_SISTEMA_TRACAO = 23
