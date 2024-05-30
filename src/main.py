@@ -1,17 +1,23 @@
 import time
+import os
 from raspberry import Raspberry
 from bms import BMS
 
 _TENSAO_DATASHEET_MIN = 70.0
+
+serial_port = os.environ.get("SERIAL_PORT", "COM4")
+
 rasp = Raspberry()
 
-bms = BMS("COM4")
+bms = BMS(serial_port)
 
 def processar_falha():
     rasp.abrir_shutdown_system()
     rasp.acionar_sinal_ams()
 
 try:
+    print("Iniciando sistema...")
+
     while True:
 
         if rasp.validar_sistema_ativo() or rasp.validar_conectado_carga():

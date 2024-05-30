@@ -14,8 +14,12 @@ class Raspberry:
 
         GPIO.setup(self._GPIO_SISTEMA_TRACAO, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) 
         GPIO.setup(self._GPIO_CONECTADO_CARGA, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-        GPIO.setup(self._GPIO_SHUTDOWN_CIRCUIT, GPIO.OUT, GPIO.LOW) 
-        GPIO.setup(self._GPIO_AVISO_AMS, GPIO.OUT, GPIO.LOW)   
+
+        GPIO.setup(self._GPIO_SHUTDOWN_CIRCUIT, GPIO.OUT) 
+        GPIO.output(self._GPIO_SHUTDOWN_CIRCUIT, GPIO.LOW)
+
+        GPIO.setup(self._GPIO_AVISO_AMS, GPIO.OUT)   
+        GPIO.output(self._GPIO_AVISO_AMS, GPIO.LOW)
     
     def validar_sistema_ativo(self):
         try:
