@@ -6,11 +6,14 @@ Este projeto é um sistema AMS e foi projetado para executar em um Raspberry PI
 1. Install requirements 
 ```bash
 pip install -r requirements.txt
+```
 
 2. Para deploy em Máquina Virtual Raspbian
 ```bash
 ./deployVM.sh
+```
 
 3. Para deploy em Raspberry PI via SSH
 ```bash
 ./deploy.sh
+```
