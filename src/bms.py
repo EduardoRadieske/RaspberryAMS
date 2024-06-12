@@ -39,6 +39,12 @@ class BMS:
             self.daly.disconnect()
         except Exception:
             pass
+
+    def restart(self):
+        try:
+            self.daly.restart()
+        except Exception as e:
+            print(f"Ocorreu um erro BMS restart: {e}")
     
     def retornar_tensao_total(self, tentativa = 1):
         socJson = False
@@ -60,11 +66,13 @@ class BMS:
 
                 return self.retornar_tensao_total(tentativa + 1)
             else:
-                ##DEBGUG print(f"_ult_soc_medido: {self._ult_soc_medido}")
+                print(f"_ult_soc_medido 2: {self._ult_soc_medido}")
                 return self._ult_soc_medido
             
-        self._ult_soc_medido = socJson.total_voltage
-        return socJson.total_voltage
+        self._ult_soc_medido = socJson['total_voltage']
+
+        print(f"_ult_soc_medido 1: {self._ult_soc_medido}")
+        return socJson['total_voltage']
     
     
     

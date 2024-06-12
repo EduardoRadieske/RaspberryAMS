@@ -9,7 +9,7 @@ serial_port = os.environ.get("SERIAL_PORT", "COM4")
 
 rasp = Raspberry()
 
-bms = BMS(serial_port)
+bms = BMS(serial_port, True)
 
 def processar_falha():
     rasp.abrir_shutdown_system()
@@ -19,6 +19,7 @@ try:
     print("Iniciando sistema...")
 
     while True:
+        bms.restart()
 
         if rasp.validar_sistema_ativo() or rasp.validar_conectado_carga():
             print("Sistema monitorando!")
