@@ -9,7 +9,7 @@ serial_port = os.environ.get("SERIAL_PORT", "COM4")
 
 rasp = Raspberry()
 
-bms = BMS(serial_port, True)
+bms = BMS(serial_port)
 
 def processar_falha():
     rasp.abrir_shutdown_system()

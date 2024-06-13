@@ -11,8 +11,7 @@ scp -P 2222 raspberry-ams.tar raspbian@127.0.0.1:/home/raspbian
 
 echo "Iniciando docker"
 ssh -p 2222 raspbian@127.0.0.1 << EOF
-docker stop raspberry-ams 
-docker rm raspberry-ams
+docker rm -f raspberry-ams
 docker load -i /home/raspbian/raspberry-ams.tar
-docker run --privileged -d --name raspberry-ams raspberry-ams
+docker run --privileged -d --restart always --name raspberry-ams raspberry-ams
 EOF

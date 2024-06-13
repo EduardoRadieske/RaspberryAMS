@@ -1,6 +1,6 @@
 import traceback
-from RPiSim.GPIO import GPIO # DESCOMENTAR PARA TESTAR NO WINDOWS
-#import RPi.GPIO as GPIO
+#from RPiSim.GPIO import GPIO # DESCOMENTAR PARA TESTAR NO WINDOWS
+import RPi.GPIO as GPIO
 
 class Raspberry:
     _GPIO_SISTEMA_TRACAO = 23
@@ -23,14 +23,14 @@ class Raspberry:
     
     def validar_sistema_ativo(self):
         try:
-            return GPIO.input(self._GPIO_SISTEMA_TRACAO)
+            return GPIO.HIGH == GPIO.input(self._GPIO_SISTEMA_TRACAO)
         except Exception:
             traceback.print_exc()
             return False
 
     def validar_conectado_carga(self):
         try:
-            return GPIO.input(self._GPIO_CONECTADO_CARGA)
+            return GPIO.HIGH == GPIO.input(self._GPIO_CONECTADO_CARGA)
         except Exception:
             traceback.print_exc()
             return False

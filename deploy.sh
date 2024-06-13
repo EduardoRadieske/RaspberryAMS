@@ -28,8 +28,7 @@ check_status() {
 
 # Validar e parar a aplicação
 sshpass -p $PASSWORD ssh -o ConnectTimeout=10 -p 22 eracing@$IP_ADDRESS << EOF 
-docker stop raspberry-ams 
-docker rm raspberry-ams
+docker rm -f raspberry-ams
 EOF
 check_status $? "Falha ao parar o Docker remotamente"
 
@@ -49,7 +48,7 @@ sshpass -p $PASSWORD ssh -o ConnectTimeout=10 -p 22 eracing@$IP_ADDRESS << EOF
 cd $REMOTE_DIR
 docker build -t raspberry-ams . && \
 rm -rf $REMOTE_DIR/src $REMOTE_DIR/requirements.txt $REMOTE_DIR/Dockerfile && \
-docker run --privileged -d --name raspberry-ams raspberry-ams
+docker run --privileged -d --restart always --name raspberry-ams raspberry-ams
 EOF
 check_status $? "Falha ao construir e rodar o Docker remotamente"
 
