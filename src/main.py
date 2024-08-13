@@ -3,8 +3,6 @@ import os
 from raspberry import Raspberry
 from bms import BMS
 
-_TENSAO_DATASHEET_MIN = 70.0
-
 serial_port = os.environ.get("SERIAL_PORT", "COM4")
 
 rasp = Raspberry()
@@ -26,12 +24,12 @@ try:
 
             if bms.validar_falha():
                 processar_falha()
-                time.sleep(10)
+                time.sleep(5)
                 continue
             
-            if bms.retornar_tensao_total() < _TENSAO_DATASHEET_MIN:
+            if not bms.validar_niveis_tensao():
                 processar_falha()
-                time.sleep(10)
+                time.sleep(5)
                 continue
             
             """"
@@ -42,7 +40,7 @@ try:
                 continue
             """
 
-        time.sleep(5)
+        time.sleep(1)
 except KeyboardInterrupt:
     print("\nPrograma encerrado pelo usuário (Ctrl+C).")
 finally:

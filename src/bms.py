@@ -4,7 +4,10 @@ import logging
 import time
 
 class BMS:
-    _ult_soc_medido = 0.0
+    _TENSAO_DATASHEET_MAX = 3.6
+    _TENSAO_DATASHEET_MIN = 3.0
+
+    _ult_status_tensao = True
 
     def __init__(self, porta, debug = False):
         if debug:
@@ -46,13 +49,13 @@ class BMS:
         except Exception as e:
             print(f"Ocorreu um erro BMS restart: {e}")
     
-    def retornar_tensao_total(self, tentativa = 1):
+    def validar_niveis_tensao(self, tentativa = 1):
         socJson = False
 
         try:
-            socJson = self.daly.get_soc()
+            socJson = self.daly.get_cell_voltage_range()
         except Exception as e:
-            print(f"Ocorreu um erro BMS get_soc: {e}")
+            print(f"Ocorreu um erro BMS get_cell_voltage_range: {e}")
 
         if not socJson:
             if tentativa < 3:
@@ -64,15 +67,17 @@ class BMS:
 
                 time.sleep(2)
 
-                return self.retornar_tensao_total(tentativa + 1)
+                return self.validar_niveis_tensao(tentativa + 1)
             else:
-                print(f"_ult_soc_medido 2: {self._ult_soc_medido}")
-                return self._ult_soc_medido
-            
-        self._ult_soc_medido = socJson['total_voltage']
+                print(f"_ult_status_tensao 2: {self._ult_status_tensao}")
+                return self._ult_status_tensao
+        
+        if (socJson['lowest_voltage'] < self._TENSAO_DATASHEET_MIN or 
+            socJson['highest_voltage'] > self._TENSAO_DATASHEET_MAX):
+            self._ult_status_tensao = False
+        else:
+            self._ult_status_tensao = True
 
-        print(f"_ult_soc_medido 1: {self._ult_soc_medido}")
-        return socJson['total_voltage']
-    
-    
-    
+        print(f"_ult_status_tensao 1: {self._ult_status_tensao}")
+        return self._ult_status_tensao
+
